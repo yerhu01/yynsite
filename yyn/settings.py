@@ -43,11 +43,14 @@ INSTALLED_APPS = [
     #my apps
     'aboutme',
     'blog',
+    'sendemail',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     #'allauth.socialaccount.providers.github',
+
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -134,6 +137,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'),]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+MEDIA_URL = '/media/' 
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+
 
 
 AUTHENTICATION_BACKENDS = [
@@ -146,3 +152,6 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 #ACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGIN_REDIRECT_URL = '/' #redirect to home upon successful login
+
+# for sendemail app
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

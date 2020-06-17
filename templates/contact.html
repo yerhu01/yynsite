@@ -1,10 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="content">
-        <h2>Contact</h2>
-        <p>This example use media queries to transform the sidebar to a top navigation bar when the screen size is 700px or less.</p>
-        <p>We have also added a media query for screens that are 400px or less, which will vertically stack and center the navigation links.</p>
-        <h3>Resize the browser window to see the effect.</h3>
-    </div>
+<div class="post-header">
+    <h1 class="post-title">{{ title }}</h1>
+</div>
+<div class="post-content">
+    <form action=".">
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="Your name...">
+  
+      <label for="email">Email</label>
+      <input type="text" id="email" name="email" placeholder="Your email...">
+  
+      <!-- <label for="country">Country</label>
+      <select id="country" name="country">
+        <option value="australia">Australia</option>
+        <option value="canada">Canada</option>
+        <option value="usa">USA</option>
+      </select> -->
+  
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="Write your message..." style="height:200px"></textarea>
+  
+      <input type="submit" value="Submit"> 
+    </form>
+</div>
 {% endblock content %}

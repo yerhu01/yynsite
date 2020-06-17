@@ -16,12 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from aboutme.views import index
+from django.conf import settings
+from django.conf.urls.static import static
+from aboutme.views import art, contact, index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
     path('accounts/', include('allauth.urls')),
     path('blog/', include('blog.urls')),
+    path('post/', include('blog.urls')),
+    path('art/', art),
+    path('contact/', contact),
+    path('tinymce/', include('tinymce.urls')),
 ]
 
+if settings.DEBUG:
+    #ex. {{ img.images.url }}
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
