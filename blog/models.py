@@ -1,28 +1,33 @@
 from django.db import models
 
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
 from tinymce.models import HTMLField
 
+User = get_user_model()
+
 class Category(models.Model):
-    title = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
     def __str__(self):
-        return self.title
+        return self.name
 
 # Create your models here.
 class Post(models.Model):
     title = models.CharField(max_length=100)
     overview = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True)
     content = HTMLField('Content')
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, related_name='posts')
+        #By adding a related_name of posts, we can access category.posts to give us a list of posts with that category
     featured = models.BooleanField(default=False)
+    private = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post-detail', kwargs={'id': self.id})
+        return reverse('blog_detail', kwargs={'pk': self.pk})
 
 
 def get_image_location(instance, filename):
@@ -33,11 +38,19 @@ def get_image_location(instance, filename):
 class PostImage(models.Model):
     # When a Post is deleted, uploaded images are also deleted
     post = models.ForeignKey(Post, on_delete=models.CASCADE, 
-                                related_name='images')
+                                related_name='images') #can access by post.images in template
     image = models.ImageField(upload_to=get_image_location,
                                 null=True, blank=True)
     
     def __str__(self):
         return "%s image" % (self.post.title)
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    body = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     
+    def __str__(self):
+        return self.user.username
 

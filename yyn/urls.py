@@ -18,16 +18,13 @@ from django.urls import include, path
 
 from django.conf import settings
 from django.conf.urls.static import static
-from aboutme.views import art, contact, index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
+    path('', include('aboutme.urls')),
     path('accounts/', include('allauth.urls')),
     path('blog/', include('blog.urls')),
-    path('post/', include('blog.urls')),
-    path('art/', art),
-    path('contact/', contact),
+    path('contact/', include('sendemail.urls')),
     path('tinymce/', include('tinymce.urls')),
 ]
 
