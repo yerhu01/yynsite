@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static "css/grid.css" %}">
+{% endblock %}
+
+{% block content %}
+    <!-- About Me -->
+    <div class="container">
+        <div class="content">
+            <h2>{{ title }}</h2>
+            <p>{{ description}}</p>
+            <!-- <img src="{% static "img/pictureofme.jpg" }" alt="Me" style="width:100%"> -->
+        </div>
+
+        <h2>Featured Posts</h2>
+        <div class="row">
+            {% for post in featured %}
+            <div class="column">
+                <div class="content">
+                        {% with post.images.all|first as first_postimage %}
+                        <a href="{% url 'blog_detail' post.pk %}">
+                            <img src="{{ first_postimage.image.url }}" alt="{{ post.title }} image" style="width:100%">
+                        </a>
+                        {% endwith %}
+                        <h3>{{ post.title }}</h3>
+                        <p> {{ post.overview }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h2>Recent Art</h2>
+        <div class="row">
+            {% for post in recent_art %}
+            <div class="column">
+                <div class="content">
+                        {% with post.images.all|first as first_postimage %}
+                        <a href="{% url 'blog_detail' post.pk %}">
+                            <img src="{{ first_postimage.image.url }}" alt="{{ post.title }} image" style="width:100%">
+                        </a>
+                        {% endwith %}
+                        <h3>{{ post.title }}</h3>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

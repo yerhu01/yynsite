@@ -9,7 +9,7 @@ def index(request):
     title = "About Me"
     description = About.objects.order_by('-created_on')[0].description
     featured = Post.objects.filter(featured=True)[0:4]
-    category = Category.objects.filter(name="Art")
+    category = Category.objects.filter(name="Gallery")
     recent_art = Post.objects.filter(categories=category[0]).order_by('-created_on')[0:4]
 
     context = {
@@ -24,7 +24,7 @@ def index(request):
 def art(request):
     """The art page for yynsite."""
     title = "My Art Timeline"
-    category = Category.objects.filter(name="Art")
+    category = Category.objects.filter(name="Gallery")
     post_list = Post.objects.filter(categories=category[0]).order_by('-created_on')
 
     context = {

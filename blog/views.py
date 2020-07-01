@@ -11,9 +11,9 @@ from .forms import CommentForm, SearchForm
 def blog_index(request):
     post_list = None
     if not request.user.is_superuser:
-        post_list = Post.objects.all().exclude(private=True).order_by('-created_on')
+        post_list = Post.objects.all().exclude(private=True).order_by('-date')
     else:
-        post_list = Post.objects.all().order_by('-created_on')
+        post_list = Post.objects.all().order_by('-date')
 
     form = SearchForm()
 
@@ -24,9 +24,7 @@ def blog_index(request):
     return render(request, 'blog.html', context)
 
 def blog_search(request):
-    queryset = Post.objects.all()
-    query = None
-    category = None
+    queryset = Post.objects.all().order_by('-date')
     if request.method == 'GET':
         # create a form instance and populate it with data from the request:
         form = SearchForm(request.GET)
@@ -37,15 +35,11 @@ def blog_search(request):
             start_date = form.cleaned_data["start_date"]
             end_date = form.cleaned_data["end_date"]
             category = form.cleaned_data["category"]
-            #end_date = end_date.replace(day=end_date.day+1)
 
             if category != 'All':
-                queryset = queryset.filter(
-                        categories__name__icontains=category
-                        ).order_by(
-                            '-created_on'
-                        )
-            queryset = queryset.filter(created_on__range=(start_date, end_date))
+                queryset = queryset.filter(categories__name__icontains=category)
+
+            queryset = queryset.filter(date__range=(start_date, end_date))
     
     if query:
         #Q(name__contains=list[0]) | Q(name__contains=list[1]) | ... | Q(name__contains=list[-1])
@@ -59,8 +53,6 @@ def blog_search(request):
                              
     
     context = {'queryset': queryset,
-        'query': query,
-        'category': category,
             }
 
     return render(request, 'search_results.html', context)

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="col-md-8 offset-md-2">
+    <h1>Blog</h1>
+    <div class="search-container">
+        <form action="{% url 'blog_search' %}" class="search-form" method="get">
+            <div class="form-group">
+              {{ form.search }}
+            </div>
+            <div class="form-group">
+                Category: {{ form.category }}
+            </div>
+            <div class="form-group">
+              Date: {{ form.start_date }} to {{ form.end_date }}
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+    <hr>
+    {% for post in post_list %}
+    <h2><a href="{% url 'blog_detail' post.pk %}">{{ post.title }}</a></h2>
+    <small>
+        {{ post.date }} |&nbsp;
+        Categories:&nbsp;
+        {% for category in post.categories.all %}
+        <a href="{% url 'blog_category' category.name %}">
+            {{ category.name }}
+        </a>&nbsp;
+        {% endfor %}
+    </small>
+    <p>{{ post.overview | slice:":400" }}</p>
+    {% endfor %}
+</div>
+{% endblock content %}
+
+{% block extrascripts %}
+<!-- Category AutoComplete -->
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{{ form.media }}
+<script>
+(function($) {
+    $('#add-form').click(function() {
+        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+        newTable.find(':input').each(function() {
+            for (attr of ['name', 'id'])
+                $(this).attr(
+                    attr,
+                    $(this).attr(attr).replace('__prefix__', index)
+                )
+        })
+        newTable.insertBefore($(this))
+        $('#id_inline_test_models-TOTAL_FORMS').val(
+            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+        )
+        newTable.slideDown()
+    })
+})($)
+</script>
+<!-- End Category AutoComplete -->
+{% endblock %}

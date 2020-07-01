@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
 from tinymce.models import HTMLField
+from datetime import date
 
 User = get_user_model()
 
@@ -15,9 +16,10 @@ class Category(models.Model):
 # Create your models here.
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    overview = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    content = HTMLField('Content')
+    overview = models.TextField(blank=True)
+    date = models.DateField(default=date.today)
+    created_on = models.DateTimeField(auto_now_add=True) #UTC
+    content = HTMLField('Content', blank=True)
     categories = models.ManyToManyField(Category, related_name='posts')
         #By adding a related_name of posts, we can access category.posts to give us a list of posts with that category
     featured = models.BooleanField(default=False)
@@ -33,7 +35,7 @@ class Post(models.Model):
 def get_image_location(instance, filename):
     title = instance.post.title
     slug = slugify(title)
-    return "post_images/%s-%s" % (slug, filename)  
+    return "post_images/%d-%s/%s" % (instance.post.pk, slug, filename)  
 
 class PostImage(models.Model):
     # When a Post is deleted, uploaded images are also deleted
