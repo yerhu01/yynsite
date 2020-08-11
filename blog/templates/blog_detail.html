@@ -50,7 +50,7 @@
     
   <h4>Comments:</h4>
   {% if request.user.is_authenticated %}
-    <form action="/blog/{{ post.pk }}/" method="post">
+    <form action="/blog/detail/{{ post.pk }}/" method="post">
         {% csrf_token %}
         <!-- <div class="form-group">
             form.author

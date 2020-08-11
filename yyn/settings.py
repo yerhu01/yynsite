@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '76ib^$a2s%w0l&*wpj+x+obwn68$v!d5$&)gd9rjog2q4jul_n'
+SECRET_KEY = '7ab$#werasdf!23s@afhgjfdslosh8524128rgfsdfh5#$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'dal',
     'dal_select2',
     'django.contrib.admin',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +163,13 @@ LOGIN_REDIRECT_URL = '/' #redirect to home upon successful login
 
 # for sendemail app
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+#The list views for users and code snippets could end up returning 
+# quite a lot of instances, so really we'd like to make sure 
+# we paginate the results, and allow the API client to step through 
+# each of the individual pages.
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

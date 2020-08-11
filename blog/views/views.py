@@ -4,8 +4,8 @@ from django.db.models import Q
 
 from functools import reduce
 from dal import autocomplete
-from .models import Post, Comment, Category
-from .forms import CommentForm, SearchForm
+from blog.models import Post, Comment, Category
+from blog.forms import CommentForm, SearchForm
 
 # Create your views here.
 def blog_index(request):
